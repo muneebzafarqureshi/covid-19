@@ -18,7 +18,7 @@ const Charts = () => {
     });
 
     const lineChart = (
-        dailyData.length
+        dailyData.length 
             ? (
             <Line
             data = {{

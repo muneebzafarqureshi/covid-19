@@ -18,17 +18,24 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Installing Node Module
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 12
-
-      # Runs a set of commands using the runners shell
-      - name: Installing Surge
-        run: npm install --global surge
-      - name: Deploying Using Surge
-        run: surge ./covid_19_by_muneeb.surge.sh --token ${{ secrets.SURGE_TOKEN}}
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: 12
+    
+    - name: GitHub Action for Yarn
+      uses: Borales/actions-yarn@v2.3.0
+      with:
+        cmd: install
+    
+    - name: Creating Build
+      run: yarn build
+    
+    - name: Installing surge
+      run: npm install -g surge
+  
+    - name: Deploying on Surge
+        run: surge ./build http://covid_19_by_muneeb.surge.sh/ --token ${{ secrets.SURGE_TOKEN}}
